@@ -23,6 +23,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.R.layout.simple_list_item_1;
 
@@ -49,8 +51,8 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         sv = (SearchView)findViewById(R.id.searchView1);
         sv.setOnClickListener(this);
 
-        hiloconexion = new GetEncomiendas();
-        hiloconexion.execute(GET);
+       hiloconexion = new GetEncomiendas();
+       hiloconexion.execute(GET);
 
         final ArrayAdapter<terminal> adaptador = new ArrayAdapter<terminal>(this, simple_list_item_1,Farcade.listaTerminal);
         listaTerminales.setAdapter(adaptador);
@@ -73,7 +75,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-    /*   switch (v.getId()) {
+     /* switch (v.getId()) {
            case R.id.searchView1:
                 //hiloconexion = new GetEncomiendas();
                 //hiloconexion.execute(GET);
@@ -139,9 +141,10 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
             try {
                 for(int i=0; i<s.length();i++){
                     JSONObject json = s.getJSONObject(i);
+                    List<viaje> listaViajes = new ArrayList<viaje>();
                     int id = json.getInt("id");
                     String nom = json.getString("nombre").toString();
-                    terminal t = new terminal(id,nom);
+                    terminal t = new terminal(id,nom,listaViajes);
                     Farcade.listaTerminal.add(t);
                 }
             } catch (JSONException e) {

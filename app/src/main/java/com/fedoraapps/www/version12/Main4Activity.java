@@ -1,6 +1,5 @@
 package com.fedoraapps.www.version12;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,59 +22,55 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import static android.R.layout.simple_list_item_1;
 
-public class Main3Activity extends AppCompatActivity implements View.OnClickListener{
+public class Main4Activity extends AppCompatActivity implements View.OnClickListener {
 
-    ListView listadoViajes;
+
+    ListView Listaencomiendas;
     SearchView sv;
-    GetViajes hiloconexion;
-   static int codTerminal;
-//    String IP = "https://lacbus.firebaseio.com";
+    GETENCOMIENDAS hiloconexion;
+    static int codViaje;
+    //    String IP = "https://lacbus.firebaseio.com";
     JSONArray respuestaJSON;
-       // String GET = "https://lacbus.firebaseio.com/AppEncomiendasAndroid/viajes.json?orderBy=\"destinoId\"&equalTo=";
-    String GET = "https://lacbus.firebaseio.com/AppEncomiendasAndroid/viajes.json";
-
+    // String GET = "https://lacbus.firebaseio.com/AppEncomiendasAndroid/viajes.json?orderBy=\"destinoId\"&equalTo=";
+    String GET = "https://lacbus.firebaseio.com/AppEncomiendasAndroid/encomiendas.json";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main3);
+        setContentView(R.layout.activity_main4);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-          codTerminal = getIntent().getExtras().getInt("codigo");
 
-
-        listadoViajes = (ListView)findViewById(R.id.lista);
-        listadoViajes.setTextFilterEnabled(true);
+        codViaje = getIntent().getExtras().getInt("codigo");
+        Listaencomiendas = (ListView)findViewById(R.id.lista);
+        Listaencomiendas.setTextFilterEnabled(true);
 
         sv = (SearchView)findViewById(R.id.searchView1);
         sv.setOnClickListener(this);
 
-        hiloconexion = new GetViajes();
+        hiloconexion = new GETENCOMIENDAS();
         hiloconexion.execute(GET);
 
-        final ArrayAdapter<viaje> adaptador = new ArrayAdapter<viaje>(this, simple_list_item_1,Farcade.listaViajes);
-        listadoViajes.setAdapter(adaptador);
-        listadoViajes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        final ArrayAdapter<encomienda> adaptador = new ArrayAdapter<encomienda>(this, simple_list_item_1,Farcade.listaEncomiendas);
+        Listaencomiendas.setAdapter(adaptador);
+        Listaencomiendas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 //String tex = listado.getItemAtPosition(position).toString();
-                viaje v = adaptador.getItem(position);
-                int cod = v.getCodV();
+               // viaje v = adaptador.getItem(position);
+               // int cod = v.getCodV();
                 //texto.setText(cod);
-                Intent i = new Intent(Main3Activity.this, Main4Activity.class);
-                i.putExtra("codigo", cod);
-                startActivity(i);
+                // Intent i = new Intent(Main3Activity.this, Main3Activity.class);
+                //i.putExtra("codigo", cod);
+                //startActivity(i);
             }
         });
-
 
 
     }
@@ -85,28 +80,30 @@ public class Main3Activity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private class GetViajes extends AsyncTask<String,Void,JSONArray> {
+    private class GETENCOMIENDAS extends AsyncTask<String, Void, JSONArray> {
 
 
         @Override
         protected void onPostExecute(JSONArray s) {
-            List<terminal> listaTerminalViaje = new ArrayList<>();
-           List<encomienda> ListaEncomienda = new ArrayList<>();
-            for(int i=0; i< s.length();i++){
+
+            for (int i = 0; i < s.length(); i++) {
                 try {
                     JSONObject json = s.getJSONObject(i);
-                    int codOrigen = s.getJSONObject(i).getInt("origenId");
+                    int codBarrax = s.getJSONObject(i).getInt("codigoBarra");
                     int codDestino = s.getJSONObject(i).getInt("destinoId");
-                    String name = s.getJSONObject(i).getString("nombre").toString();
-                    int codV = s.getJSONObject(i).getInt("id");
-                    String fecha = s.getJSONObject(i).getString("fecha").toString();
-                    String hraArrivo = s.getJSONObject(i).getString("llegada").toString();
-                    String hraSalida = s.getJSONObject(i).getString("salida").toString();
-                    int nroCoche = s.getJSONObject(i).getInt("nroCoche");
-                    viaje Viaje = new viaje(codDestino,codOrigen,name,codV,fecha,hraArrivo,hraSalida,nroCoche,listaTerminalViaje,ListaEncomienda);
+                    String emisor = s.getJSONObject(i).getString("emisor").toString();
+                    int cedEmisor = s.getJSONObject(i).getInt("emisorCI");
+                    int codEncomienda = s.getJSONObject(i).getInt("id");
+                    int origenID = s.getJSONObject(i).getInt("origenId");
+                    String receptor = s.getJSONObject(i).getString("receptor").toString();
+                    int cedReceptor = s.getJSONObject(i).getInt("receptorCI");
+                    int codV = s.getJSONObject(i).getInt("viajeId");
+                    encomienda Encomienda = new encomienda(codBarrax,codDestino,emisor,cedEmisor,codEncomienda,origenID,receptor,cedReceptor,codV);
 
-                  if (Farcade.getViajesPorCodigo(codTerminal,Viaje.getCodV())== true){
-                    Farcade.listaViajes.add(Viaje);}
+                    if(Farcade.getEncomiendasPorCodigo(codViaje,Encomienda.getCodViaje())==true) {
+                        Farcade.listaEncomiendas.add(Encomienda);
+
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -146,6 +143,8 @@ public class Main3Activity extends AppCompatActivity implements View.OnClickList
                     respuestaJSON = new JSONArray(result.toString());
 
                     //JSONObject nombre = respuestaJSON.getJSONObject(0);
+
+
                     System.out.println(respuestaJSON.toString());
                     //String resultJSON = respuestaJSON.getString("estado");//estado es el nombre del campo del JSON
                     //System.out.println(result.toString());
@@ -162,18 +161,7 @@ public class Main3Activity extends AppCompatActivity implements View.OnClickList
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return  null;
+            return null;
         }
-
-
-
-
-
-
-
-
-
     }
-
-
 }
