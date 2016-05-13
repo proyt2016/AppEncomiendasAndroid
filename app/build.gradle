@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.fedoraapps.www.version10"
+        applicationId "com.fedoraapps.www.version12"
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1

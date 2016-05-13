@@ -1,4 +1,4 @@
-package com.fedoraapps.www.version10;
+package com.fedoraapps.www.version12;
 
 import org.junit.Test;
 

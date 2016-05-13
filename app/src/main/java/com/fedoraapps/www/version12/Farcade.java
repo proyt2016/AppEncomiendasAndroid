@@ -1,4 +1,4 @@
-package com.fedoraapps.www.version10;
+package com.fedoraapps.www.version12;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Farcade {
 
-  static   ArrayList<terminal> listaTerminal = new ArrayList<>();
+    static ArrayList<terminal> listaTerminal = new ArrayList<>();
 
     public Farcade(){};
 
