@@ -8,6 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,12 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //put your intent code here
             }
         });
-
-
-
-
-
-
     }
 
     @Override
@@ -66,6 +64,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-
+        //Se responde al evento click
+        if (v.getId() == R.id.escanear) {
+            //Se instancia un objeto de la clase IntentIntegrator
+            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+            //Se procede con el proceso de scaneo
+            scanIntegrator.initiateScan();
+        }
     }
 }
